@@ -1,0 +1,21 @@
+<li style="background-color: #fff8bf">
+    <div style="float:left; line-height: 3em; font-size: 2em;" dojoAttachPoint="containerNode"></div>
+    <div style="float:right; line-height: 3em; font-size: 2em; margin-right: 10px;">
+        <a href="#" dojoAttachEvent="onclick: onEditClick">edit</a> |
+        <a href="#" dojoAttachEvent="onclick: onDeleteClick">delete</a>
+    </div>
+    <div style="clear:both"></div>
+    <form style="display:none; margin-top: 20px;" dojoAttachPoint="ideaFormNode">
+        <div style="margin: 10px 10px 25px 10px">
+            <label style="font-size: 2em; margin-bottom: 10px">Title:</label>
+            <input dojoAttachPoint="titleNode" style="font-size: 2em" type="text" name="title" value=""/>
+        </div>
+        <div style="margin: 10px">
+            <label style="font-size: 2em; display: block">Description:</label><br/>
+            <textarea dojoAttachPoint="descriptionNode" name="description" style="font-size: 2em" cols="50" rows="5"></textarea>
+        </div>
+        <div style="padding: 10px">
+            <button style="font-size: 1.5em;" dojoAttachEvent="onclick: onUpdateClicked">Update</button>
+        </div>
+    </form>
+</li>
