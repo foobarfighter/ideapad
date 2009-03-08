@@ -1,0 +1,6 @@
+.idea/
+testapp/public/javascripts/dojo/
+testapp/log/*.log
+testapp/vendor/
+testapp/tmp/
+rdoc/
