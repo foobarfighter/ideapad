@@ -96,6 +96,7 @@ begin
       namespace :fixtures do
         desc "Load fixtures (from spec/fixtures) into the current environment's database.  Load specific fixtures using FIXTURES=x,y. Load from subdirectory in test/fixtures using FIXTURES_DIR=z."
         task :load => :environment do
+          require 'active_record/fixtures'
           ActiveRecord::Base.establish_connection(Rails.env)
           base_dir = File.join(Rails.root, 'spec', 'fixtures')
           fixtures_dir = ENV['FIXTURES_DIR'] ? File.join(base_dir, ENV['FIXTURES_DIR']) : base_dir
