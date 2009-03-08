@@ -1,0 +1,21 @@
+
+<script type="text/javascript">
+    dojo.require("dijit.layout.ContentPane");
+    dojo.require("dijit.layout.TabContainer");
+</script>
+
+
+<h1 class="title">Enter some kick ass ideas!</h1>
+
+<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" tabStrip="true" style="width: 100%; height: 20em;">
+    <div dojoType="dijit.layout.ContentPane" title="Todo">
+        <%= render :partial => "idea_list", :collections => @idea_list %>
+    </div>
+
+    <div dojoType="dijit.layout.ContentPane" title="Completed">
+        heyo!<br/>
+    </div>
+</div>
+
+<script type="text/javascript">
+</script>

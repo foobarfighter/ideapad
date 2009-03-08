@@ -1,0 +1,14 @@
+big_idea:
+  title: This is the next big idea!
+  description: If you complete this idea, then it will make you rich!  How rich?  Filthy rich... just filthy.
+  completed: false
+
+bad_idea:
+  title: This is the worst idea ever
+  description: Don't ever do this.  Ever.
+  completed: false
+
+great_idea:
+  title: Hey, I have a great idea!
+  description: Everybody should do this!
+  completed: false

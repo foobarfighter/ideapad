@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>Ideas!</title>
+
+    <style type="text/css">
+        @import "/javascripts/dojo/dojo/resources/dojo.css";
+        @import "/javascripts/dojo/dijit/themes/tundra/tundra.css";
+        @import "/stylesheets/global.css";
+    </style>
+    <script type="text/javascript" src="/javascripts/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: true"></script>
+    <script type="text/javascript">
+        dojo.registerModulePath("drails", "../drails");
+        dojo.require("drails.common");
+
+    </script>
+</head>
+<body class="tundra">
+
+<div id="content">
+<%= yield %>
+</div>
+
+</body>
+</html>

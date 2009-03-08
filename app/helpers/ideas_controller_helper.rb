@@ -1,0 +1,2 @@
+module IdeasControllerHelper
+end

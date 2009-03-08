@@ -1,0 +1,16 @@
+<% if idea_list.nil? %>
+    You have no ideas.  Hire more people that are smarter than you.
+<% else %>
+    <ul id="idea_list">
+    <% idea_list.each do |idea| %>
+      <% p idea %>
+      <li id="idea_<%= idea.id %>"><%= idea.title %></li>
+    <% end %>
+    </ul>
+<% end %>
+
+<script type="text/javascript">
+    dojo.addOnLoad(function(){
+        <%= sortable_element_js('idea_list') %>      
+    });
+</script>
