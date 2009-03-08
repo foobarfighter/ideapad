@@ -1,16 +1,17 @@
 <% if idea_list.nil? %>
     You have no ideas.  Hire more people that are smarter than you.
 <% else %>
-    <ul id="idea_list">
+
+    <script type="text/javascript">
+        dojo.require("ideapad.IdeaElement")
+        dojo.addOnLoad(function(){
+            <%= sortable_element_js('idea_list', :skipForm => true) %>
+        });
+    </script>
+
+    <ul id="idea_list" class="sortable_list" skipForm="true">
     <% idea_list.each do |idea| %>
-      <% p idea %>
-      <li id="idea_<%= idea.id %>"><%= idea.title %></li>
+      <li id="idea_<%= idea.id %>" dojoType="ideapad.IdeaElement"><%= idea.title %></li>
     <% end %>
     </ul>
 <% end %>
-
-<script type="text/javascript">
-    dojo.addOnLoad(function(){
-        <%= sortable_element_js('idea_list') %>      
-    });
-</script>

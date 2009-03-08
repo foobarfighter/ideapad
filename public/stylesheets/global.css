@@ -1,8 +1,35 @@
 #content {
-    width: 500px;
+    width: 800px;
     margin: 0 auto 0 auto;
+}
+
+#logo {
+    margin: 17px;
 }
 
 .title {
     margin-bottom: 20px;
+}
+
+.sortable_list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sortable_list li,
+.sortable_list li:last-child
+{
+    border: 1px solid #B6C2BC;
+    border-bottom: 0px;
+    padding-left: 10px;
+    background: url(/images/sortable_element_bg.png);
+    background-repeat: repeat-x;
+}
+
+.sortable_list li:last-child {
+    border-bottom: 1px solid #B6C2BC;
+}
+
+.tabLabel {
+    font-size: 20px;
 }
