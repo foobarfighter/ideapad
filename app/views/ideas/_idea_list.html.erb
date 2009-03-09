@@ -20,7 +20,7 @@
     }
 
     dojo.addOnLoad(function(){
-        sortable = <%= sortable_element_js('idea_list', :skipForm => true, :url => { :controller => ""}) %>
+        sortable = <%= sortable_element_js('idea_list', :skipForm => true, :url => { :controller => :sortables }) %>
         dojo.connect(dojo.byId("create_idea"), "click", createIdea);
     });
 </script>

@@ -6,9 +6,13 @@ class SortablesController < ApplicationController
     record_hash = results.inject({}) do |memo, record|
       memo[record.id] = record
       memo
-    end
+    end  
     @sortable_value.each_with_index do |id, sort_index|
-      record_hash[id].update_attributes!(:sort => sort_index)
+      record_hash[id.to_i].update_attributes!(:sort => sort_index)
+    end
+
+    respond_to do |format|
+      format.js { render :json => record_hash.collect { |k, v| k }.to_json }
     end
   end
 

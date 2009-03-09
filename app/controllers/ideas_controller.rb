@@ -1,6 +1,6 @@
 class IdeasController < ApplicationController
   def index
-    @idea_list = Idea.find(:all, :conditions => { :completed => false })
+    @idea_list = Idea.find(:all, :conditions => { :completed => false }, :order => :sort)
   end
 
   def create
