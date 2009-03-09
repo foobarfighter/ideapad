@@ -2,4 +2,17 @@ This is a reference application for drails which shows how you can use drails in
 
 Apologies in advance about the lack of tests.  Just trying to bang this one out.
 
+To get everything fired up, follow these steps:
+
+# Clone the repo
+git clone git://github.com/foobarfighter/ideapad.git
+
+cd ideapad
+
+# Setup the DB.  It uses sqllite by default, make sure you have sqlite3-ruby.  gem install sqlite3-ruby if you don't have it.
+rake db:create db:migrate spec:db:fixtures:load
+
+# Start up rails
+script/server
+
 See also: http://github.com/foobarfighter/drails
