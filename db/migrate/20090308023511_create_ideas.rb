@@ -4,6 +4,7 @@ class CreateIdeas < ActiveRecord::Migration
       t.string :title
       t.string :description
       t.boolean :completed
+      t.integer :sort
       t.timestamps
     end
   end

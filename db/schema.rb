@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(:version => 20090308023511) do
     t.string   "title"
     t.string   "description"
     t.boolean  "completed"
+    t.integer  "sort"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
