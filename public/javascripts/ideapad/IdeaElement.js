@@ -9,14 +9,23 @@ dojo.declare("ideapad.IdeaElement",
 	{
 		templatePath: dojo.moduleUrl("ideapad", "templates/IdeaElement.html"),
         itemId: null,
-		
-		constructor: function(){
 
+		constructor: function(){
+            console.debug("created", arguments);
 		},
 
 		postCreate: function(){
             this._parseItemId();
 		},
+
+        onCreateSuccess: function(response, ioArgs){
+            this.contract();
+            this.updateUI(response);
+        },
+
+        onCreateError: function(response, ioArgs){
+            alert("An error occurred while trying to create");
+        },
 
         onEditClick: function(){
             this.toggle();
@@ -45,20 +54,17 @@ dojo.declare("ideapad.IdeaElement",
         },
 
         onUpdateClicked: function(evt){
-            dojo.xhrPost({
-                content: { id: this.itemId },
-                url: "/ideas/update",
-                form: this.ideaFormNode,
-                load: dojo.hitch(this, "onUpdateSuccess"),
-                error: dojo.hitch(this, "onUpdateError"),
-                handleAs: 'json'
-            });
             dojo.stopEvent(evt);
+            if (this.itemId != 0){
+                this.updateIdea();
+            } else {
+                this.createIdea();
+            }
         },
 
         onUpdateSuccess: function(response, ioArgs){
             this.contract();
-            this.containerNode.innerHTML = response.idea.title;
+            this.updateUI(response);
         },
 
         onUpdateError: function(){
@@ -79,7 +85,9 @@ dojo.declare("ideapad.IdeaElement",
 
         expand: function(){
             dojo.style(this.ideaFormNode, "display", "block");
-            this.findIdeaDetails();
+            if (this.itemId != 0){
+                this.findIdeaDetails();
+            }
         },
 
         findIdeaDetails: function(){
@@ -98,6 +106,32 @@ dojo.declare("ideapad.IdeaElement",
             } else {
                 this.contract();
             }
+        },
+
+        createIdea: function(){
+            dojo.xhrPost({
+                url: "/ideas/create",
+                form: this.ideaFormNode,
+                load: dojo.hitch(this, "onCreateSuccess"),
+                error: dojo.hitch(this, "onCreateError"),
+                handleAs: 'json'
+            });
+        },
+
+        updateIdea: function(){
+            dojo.xhrPost({
+                content: { id: this.itemId },
+                url: "/ideas/update",
+                form: this.ideaFormNode,
+                load: dojo.hitch(this, "onUpdateSuccess"),
+                error: dojo.hitch(this, "onUpdateError"),
+                handleAs: 'json'
+            });
+        },
+
+        updateUI: function(response){
+            this.domNode.id = "idea_" + response.idea.id;
+            this.containerNode.innerHTML = response.idea.title;
         },
 
         _parseItemId: function(){

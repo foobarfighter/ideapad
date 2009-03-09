@@ -1,17 +1,36 @@
+<a id="create_idea" style="float:right; margin-right: 10px" href="">Create an idea!</a>
+<div style="clear:both"></div>
+
+<script type="text/javascript">
+    dojo.require("ideapad.IdeaElement");
+
+    var sortable = null;
+
+    function createIdea(evt){
+        dojo.stopEvent(evt);
+        var liNode = dojo.doc.createElement("li");
+        var ideaListNode = dojo.byId('idea_list');
+
+        liNode.className = "dojoDndItem";
+        liNode.id = "idea_0";
+        liNode.innerHTML = "New idea!";
+        dojo.place(liNode, ideaListNode, "first");
+        var ideaElement = new ideapad.IdeaElement({id: liNode.id}, liNode);
+        ideaElement.expand();
+    }
+
+    dojo.addOnLoad(function(){
+        sortable = <%= sortable_element_js('idea_list', :skipForm => true) %>
+        dojo.connect(dojo.byId("create_idea"), "click", createIdea);
+    });
+</script>
+
+<ul id="idea_list" class="sortable_list">
+    <% idea_list.each do |idea| %>
+        <li id="idea_<%= idea.id %>" dojoType="ideapad.IdeaElement"><%= idea.title %></li>
+    <% end %>
+</ul>
+
 <% if idea_list.nil? %>
     You have no ideas.  Hire more people that are smarter than you.
-<% else %>
-
-    <script type="text/javascript">
-        dojo.require("ideapad.IdeaElement")
-        dojo.addOnLoad(function(){
-            <%= sortable_element_js('idea_list', :skipForm => true) %>
-        });
-    </script>
-
-    <ul id="idea_list" class="sortable_list" skipForm="true">
-    <% idea_list.each do |idea| %>
-      <li id="idea_<%= idea.id %>" dojoType="ideapad.IdeaElement"><%= idea.title %></li>
-    <% end %>
-    </ul>
 <% end %>
