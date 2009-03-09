@@ -12,10 +12,10 @@
         var ideaListNode = dojo.byId('idea_list');
 
         liNode.className = "dojoDndItem";
-        liNode.id = "idea_0";
+        liNode.id = "idea_" + new Date().getTime();
         liNode.innerHTML = "New idea!";
         dojo.place(liNode, ideaListNode, "first");
-        var ideaElement = new ideapad.IdeaElement({id: liNode.id}, liNode);
+        var ideaElement = new ideapad.IdeaElement({isNew: true}, liNode);
         ideaElement.expand();
     }
 

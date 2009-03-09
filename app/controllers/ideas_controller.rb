@@ -4,7 +4,7 @@ class IdeasController < ApplicationController
   end
 
   def create
-    @idea = Idea.create!(:title => params[:title], :description => params[:description])
+    @idea = Idea.create!(:title => params[:title], :description => params[:description], :completed => false)
     respond_to do |format|
       format.js { render :json => @idea }
     end

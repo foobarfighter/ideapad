@@ -9,9 +9,12 @@ dojo.declare("ideapad.IdeaElement",
 	{
 		templatePath: dojo.moduleUrl("ideapad", "templates/IdeaElement.html"),
         itemId: null,
+        isNew: false,
 
-		constructor: function(){
-            console.debug("created", arguments);
+		constructor: function(args, node){
+            if (args.isNew != null){
+                this.isNew = args.isNew;
+            }
 		},
 
 		postCreate: function(){
@@ -32,7 +35,11 @@ dojo.declare("ideapad.IdeaElement",
         },
 
         onDeleteClick: function(){
-            this.deleteItem();
+            if (this.isNew){
+                this.destroy();
+            } else {
+                this.deleteItem();
+            }
         },
 
         onDeleteError: function(){
@@ -55,10 +62,10 @@ dojo.declare("ideapad.IdeaElement",
 
         onUpdateClicked: function(evt){
             dojo.stopEvent(evt);
-            if (this.itemId != 0){
-                this.updateIdea();
-            } else {
+            if (this.isNew){
                 this.createIdea();
+            } else {
+                this.updateIdea();
             }
         },
 
@@ -85,7 +92,7 @@ dojo.declare("ideapad.IdeaElement",
 
         expand: function(){
             dojo.style(this.ideaFormNode, "display", "block");
-            if (this.itemId != 0){
+            if (!this.isNew){
                 this.findIdeaDetails();
             }
         },
@@ -130,7 +137,12 @@ dojo.declare("ideapad.IdeaElement",
         },
 
         updateUI: function(response){
-            this.domNode.id = "idea_" + response.idea.id;
+            var newId = "idea_" + response.idea.id;
+            if (this.isNew){
+                this.itemId = response.idea.id;
+                this.domNode.id = "idea_" + response.idea.id;
+                this.isNew = false;
+            }
             this.containerNode.innerHTML = response.idea.title;
         },
 
