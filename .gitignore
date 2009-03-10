@@ -2,3 +2,4 @@
 log/
 doc/
 db/*.sqlite3
+public/javascripts/release

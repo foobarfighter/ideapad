@@ -3,7 +3,7 @@ class CreateIdeas < ActiveRecord::Migration
     create_table :ideas do |t|
       t.string :title
       t.string :description
-      t.integer :completed
+      t.boolean :completed
       t.integer :sort
       t.timestamps
     end

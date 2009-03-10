@@ -10,12 +10,21 @@
         @import "/javascripts/dojo/dijit/themes/nihilo/nihilo.css";
         @import "/stylesheets/global.css";
     </style>
-    <script type="text/javascript" src="/javascripts/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: true"></script>
-    <script type="text/javascript">
-        dojo.registerModulePath("drails", "../drails");
-        dojo.registerModulePath("ideapad", "../../ideapad");
-        dojo.require("drails.common");
-    </script>
+
+    <% if RAILS_ENV == "production" %>
+        <script type="text/javascript" src="/javascripts/release/dojo/dojo/dojo.js" djConfig="parseOnLoad: true"></script>
+        <script type="text/javascript" src="/javascripts/release/dojo/dojo/ideapad.js"></script>
+        <script type="text/javascript">
+            dojo.require("drails.common");
+        </script>
+    <% else %>
+        <script type="text/javascript" src="/javascripts/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: true"></script>
+        <script type="text/javascript">
+            dojo.registerModulePath("drails", "../drails");
+            dojo.registerModulePath("ideapad", "../../ideapad");
+            dojo.require("drails.common");
+        </script>
+<% end %>
 </head>
 <body class="nihilo">
 
