@@ -15,8 +15,19 @@
         liNode.id = "idea_" + new Date().getTime();
         liNode.innerHTML = "New idea!";
         dojo.place(liNode, ideaListNode, "first");
+
         var ideaElement = new ideapad.IdeaElement({isNew: true}, liNode);
         ideaElement.expand();
+        dojo.connect(ideaElement, "onUpdateUI", updateSortable);
+        dojo.addClass(ideaElement.domNode, "dojoDndItem");
+        sortable.source.setItem(liNode.id, { data: ideaElement.domNode.innerHTML, type: [ "text" ] });
+    }
+
+    function updateSortable(ideaElement, oldKey){
+        if (oldKey != ideaElement.domNode.id){
+            sortable.source.delItem(oldKey);
+            sortable.source.setItem(ideaElement.domNode.id, { data: ideaElement.domNode.innerHTML, type: [ "text" ] });
+        }
     }
 
     dojo.addOnLoad(function(){

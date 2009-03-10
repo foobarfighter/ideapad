@@ -78,6 +78,9 @@ dojo.declare("ideapad.IdeaElement",
             alert("An error occurred while trying to update");
         },
 
+        onUpdateUI: function(self){
+        },
+
         deleteItem: function(){
             dojo.xhrDelete({
                 url: "/ideas/" + this.itemId,
@@ -138,12 +141,14 @@ dojo.declare("ideapad.IdeaElement",
 
         updateUI: function(response){
             var newId = "idea_" + response.idea.id;
+            var oldId = this.domNode.id;
             if (this.isNew){
                 this.itemId = response.idea.id;
                 this.domNode.id = "idea_" + response.idea.id;
                 this.isNew = false;
             }
             this.containerNode.innerHTML = response.idea.title;
+            this.onUpdateUI(this, oldId);
         },
 
         _parseItemId: function(){
