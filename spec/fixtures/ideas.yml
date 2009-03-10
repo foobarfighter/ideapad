@@ -1,17 +1,29 @@
-big_idea:
+big:
   title: This is the next big idea!
   description: If you complete this idea, then it will make you rich!  How rich?  Filthy rich... just filthy.
   completed: false
   sort: 0
 
-bad_idea:
+bad:
   title: This is the worst idea ever
   description: Don't ever do this.  Ever.
   completed: false
   sort: 1
 
-great_idea:
+great:
   title: Hey, I have a great idea!
   description: Everybody should do this!
   completed: false
   sort: 3
+
+done:
+  title: This idea is done, and done!
+  description: Woohoo!
+  completed: true
+  sort: 0
+
+finished:
+  title: I finished it
+  description: That's what she said
+  completed: true
+  sort: 0

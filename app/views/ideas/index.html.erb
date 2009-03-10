@@ -4,13 +4,110 @@
     dojo.require("dijit.layout.TabContainer");
 </script>
 
+<script type="text/javascript">
+    dojo.require("ideapad.IdeaElement");
+
+    var sortable = null;
+    var connects = [];
+
+    function createIdea(evt){
+        dojo.stopEvent(evt);
+        var liNode = dojo.doc.createElement("li");
+        var ideaListNode = sortable.sourceNode;
+
+        liNode.className = "dojoDndItem";
+        liNode.id = "idea_" + new Date().getTime();
+        liNode.innerHTML = "New idea!";
+        dojo.place(liNode, ideaListNode, "first");
+
+        var ideaElement = new ideapad.IdeaElement({isNew: true}, liNode);
+        var h = dojo.connect(ideaElement, "onSave", function(ideaElement) { return saveSortable(ideaElement, h) });
+
+        connects.push(h);
+        connects.push(dojo.connect(ideaElement, "onUpdateUI", updateSortable));
+        ideaElement.expand();
+        dojo.addClass(ideaElement.domNode, "dojoDndItem");
+        sortable.source.setItem(liNode.id, { data: ideaElement.domNode.innerHTML, type: [ "text" ] });
+    }
+
+    function updateSortable(ideaElement, oldKey){
+        if (oldKey != ideaElement.domNode.id){
+            sortable.source.delItem(oldKey);
+            sortable.source.setItem(ideaElement.domNode.id, { data: ideaElement.domNode.innerHTML, type: [ "text" ] });
+        }
+    }
+
+    function saveSortable(ideaElement, connectHandle){
+        try {
+            dojo.disconnect(connectHandle);
+            sortable.onUpdate();
+        } catch(e){
+            console.debug("error occurred while saving: " + e);
+        }
+    }
+
+    function initSortable(list_id){
+        try {
+            var createIdeaNode = dojo.byId('create_idea');
+            if (createIdeaNode){
+                connects.push(dojo.connect(createIdeaNode, "click", createIdea));
+            }
+            if (list_id == 'idea_list_todo'){
+                sortable = <%= sortable_element_js('idea_list_todo', :skipForm => true, :url => { :controller => :sortables }) %>
+            } else if (list_id == 'idea_list_completed'){
+                sortable = <%= sortable_element_js('idea_list_completed', :skipForm => true, :url => { :controller => :sortables }) %>
+            }
+        } catch (e) {
+            console.debug("error occurred while initializing list: ", e);
+            alert("Error occurred while trying to initialize.  Refresh the page.");
+        }
+    }
+
+    function destroySortable(){
+        alert("unloading!");
+        try {
+            if (sortable) sortable.destroy();
+            if (connects.length) {
+                dojo.forEach(connects, function(handle) {
+                    dojo.disconnect(handle);
+                });
+                connects = [];
+            }
+            dijit.registry.byClass("ideapad.IdeaElement").forEach(function(ideaElement){
+                ideaElement.destroy();
+            });
+        } catch (e) {
+            console.debug("error caught while trying to destroy: ", e);
+        }
+    }
+
+    dojo.addOnLoad(function(){
+        var todoList = dijit.byId("todo_list");
+        var completedList = dijit.byId("completed_list")
+        dojo.connect(todoList, "onUnload", destroySortable);
+        dojo.connect(todoList, "onLoad", function () { initSortable('idea_list_todo') });
+        dojo.connect(completedList, "onUnload", destroySortable);
+        dojo.connect(completedList, "onLoad", function () { initSortable('idea_list_completed') });
+    });
+</script>
+
+
 <%= image_tag "logo.png", :id => "logo" %>
 
-<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" tabStrip="true" style="width: 100%; height: 500em;">
-    <div dojoType="dijit.layout.ContentPane" title="TODO">
-        <%= render :partial => "idea_list", :collections => @idea_list %>
+<div id="main_tab_container" dojoType="dijit.layout.TabContainer" tabStrip="true" style="width: 100%; height: 500em;">
+    <div id="todo_list"
+         dojoType="dijit.layout.ContentPane"
+         title="TODO"
+         refreshOnShow="true"
+         selected="true"
+         href="<%= url_for :controller => "ideas", :action => "index" %>">
     </div>
 
-    <div dojoType="dijit.layout.ContentPane" title="Completed">
+    <div id="completed_list"
+         dojoType="dijit.layout.ContentPane"
+         title="Completed"
+         refreshOnShow="true"
+         selected="false"
+         href="<%= url_for :controller => "ideas", :action => "index", :completed => true %>">
     </div>
 </div>

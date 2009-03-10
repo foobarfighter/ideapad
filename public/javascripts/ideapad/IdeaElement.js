@@ -52,7 +52,6 @@ dojo.declare("ideapad.IdeaElement",
         },
 
         onFindIdeaDetailsSuccess: function(response, ioArgs){
-            console.debug("success!", arguments);
             this.titleNode.value = response.idea.title;
             this.descriptionNode.value = response.idea.description;
         },

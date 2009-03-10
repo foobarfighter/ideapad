@@ -1,54 +1,16 @@
-<a id="create_idea" style="float:right; margin-right: 10px" href="">Create an idea!</a>
-<div style="clear:both"></div>
+<% if !@completed %>
+    <a id="create_idea" style="float:right; margin-right: 10px" href="">Create an idea!</a>
+    <div style="clear:both"></div>
+<% end %>
 
-<script type="text/javascript">
-    dojo.require("ideapad.IdeaElement");
 
-    var sortable = null;
-
-    function createIdea(evt){
-        dojo.stopEvent(evt);
-        var liNode = dojo.doc.createElement("li");
-        var ideaListNode = dojo.byId('idea_list');
-
-        liNode.className = "dojoDndItem";
-        liNode.id = "idea_" + new Date().getTime();
-        liNode.innerHTML = "New idea!";
-        dojo.place(liNode, ideaListNode, "first");
-
-        var ideaElement = new ideapad.IdeaElement({isNew: true}, liNode);
-        var h = dojo.connect(ideaElement, "onSave", function(ideaElement) { return saveSortable(ideaElement, h) });
-        dojo.connect(ideaElement, "onUpdateUI", updateSortable);
-        ideaElement.expand();
-        dojo.addClass(ideaElement.domNode, "dojoDndItem");
-        sortable.source.setItem(liNode.id, { data: ideaElement.domNode.innerHTML, type: [ "text" ] });
-    }
-
-    function updateSortable(ideaElement, oldKey){
-        if (oldKey != ideaElement.domNode.id){
-            sortable.source.delItem(oldKey);
-            sortable.source.setItem(ideaElement.domNode.id, { data: ideaElement.domNode.innerHTML, type: [ "text" ] });
-        }
-    }
-
-    function saveSortable(ideaElement, connectHandle){
-        console.debug(connectHandle);
-        dojo.disconnect(connectHandle);
-        sortable.onUpdate();
-    }
-
-    dojo.addOnLoad(function(){
-        sortable = <%= sortable_element_js('idea_list', :skipForm => true, :url => { :controller => :sortables }) %>
-        dojo.connect(dojo.byId("create_idea"), "click", createIdea);
-    });
-</script>
-
-<ul id="idea_list" class="sortable_list">
-    <% idea_list.each do |idea| %>
+<% list_id = @completed ? "idea_list_completed" : "idea_list_todo" %>
+<ul id="<%= list_id %>" class="sortable_list">
+    <% @ideas.each do |idea| %>
         <li id="idea_<%= idea.id %>" dojoType="ideapad.IdeaElement"><%= idea.title %></li>
     <% end %>
 </ul>
 
-<% if idea_list.nil? %>
+<% if @ideas.nil? %>
     You have no ideas.  Hire more people that are smarter than you.
 <% end %>

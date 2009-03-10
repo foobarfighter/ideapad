@@ -1,6 +1,10 @@
 class IdeasController < ApplicationController
+  before_filter :set_completed
+
   def index
-    @idea_list = Idea.find(:all, :conditions => { :completed => false }, :order => :sort)
+    @ideas = Idea.find(:all, :conditions => { :completed => @completed }, :order => :sort)
+
+    render :template => "ideas/_idea_list.html.erb", :layout => false if request.xhr?
   end
 
   def create
@@ -30,5 +34,13 @@ class IdeasController < ApplicationController
   
 
   private
+
+  def set_completed
+    @completed = case params[:completed]
+    when "true": true
+    when "false": false
+    else false
+    end
+  end
 
 end

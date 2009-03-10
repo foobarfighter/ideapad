@@ -126,14 +126,41 @@ dojo.declare("drails.Request", [drails._base], {
 });
 
 
-dojo.declare("drails.Updater", [drails.Request], {
-	
-	stripRegExp: new RegExp('<script[^>]*>([\\S\\s]*?)<\/script>', "img"),
+drails.ScriptEvaluator = (function() {
+    var self = this;
+    return {
+        stripRegExp: new RegExp('<script[^>]*>([\\S\\s]*?)<\/script>', "img"),
+
+        evalScripts: function(scripts){
+            if (!scripts) return;
+
+            dojo.forEach(scripts, function(script){
+                if (script) eval(script);
+            });
+        },
+
+        grepScripts: function(content){
+            var regexp = self.scriptRegExp;
+            var scripts = [];
+            dojo.forEach(self.stripRegExp.exec(content), function(script, i){
+                if (i > 0) scripts.push(script);
+            });
+            return scripts;
+        },
+
+        grepAndEval: function(content){
+            var scripts = self.grepScripts(content);
+            self.evalScripts(scripts);
+        }
+    }
+})();
+
+dojo.declare("drails.Updater", [drails.Request, drails.ScriptEvaluator], {
+
 	_requestOnConstruction: false,
 	_successNode: null,
 	_failureNode: null,
-	_strippedContent: null,
-	
+
 	constructor: function(target, url, xhrArgs) {
 		xhrArgs = xhrArgs || {};
 		xhrArgs['onSuccess'] = xhrArgs['onSuccess'] || function() {};
@@ -167,31 +194,14 @@ dojo.declare("drails.Updater", [drails.Request], {
 		return responseText.replace(this.stripRegExp, "");
 	},
 	
-	_evalScripts: function(scripts){
-		if (!scripts) return;
-		
-		dojo.forEach(scripts, function(script){
-			if (script) eval(script);
-		});
-	},
-	
 	_handle: function(responseText, ioArgs, node){
 		var scripts = null;
 		var doEval = ioArgs.args['evalScripts'];
 		
-		if (doEval) scripts = this._grepScripts(responseText);
+		if (doEval) scripts = this.grepScripts(responseText);
 		responseText = this.strippedContent(responseText);
 		this._placeHTML(responseText, ioArgs, node);
-		if (doEval) this._evalScripts(scripts);
-	},
-	
-	_grepScripts: function(responseText){
-		var regexp = this.scriptRegExp;
-		var scripts = [];
-		dojo.forEach(this.stripRegExp.exec(responseText), function(script, i){
-			if (i > 0) scripts.push(script);
-		});
-		return scripts;
+		if (doEval) this.evalScripts(scripts);
 	},
 	
 	_placeHTML: function(response, ioArgs, target) {
