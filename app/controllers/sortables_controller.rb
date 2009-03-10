@@ -3,6 +3,18 @@ class SortablesController < ApplicationController
 
   def create
     results = @model_class.find(:all, :conditions => ["id in (?)", @sortable_value])
+    results = @sortable_value.enum_for(:each_with_index).collect do |id, index|
+      model = @model_class.find_by_id(id)
+      @sortable_value[index] = nil unless model
+      model
+    end
+    results = results.delete_if { |model| model.nil? }
+    @sortable_value = @sortable_value.delete_if { |id| id.nil? }
+
+    puts "--------------------->"
+    puts results.collect(&:id).join(",")
+    puts @sortable_value.join(",")
+
     record_hash = results.inject({}) do |memo, record|
       memo[record.id] = record
       memo

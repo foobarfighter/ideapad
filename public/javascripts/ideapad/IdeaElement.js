@@ -24,6 +24,7 @@ dojo.declare("ideapad.IdeaElement",
         onCreateSuccess: function(response, ioArgs){
             this.contract();
             this.updateUI(response);
+            this.onSave(this);
         },
 
         onCreateError: function(response, ioArgs){
@@ -72,6 +73,7 @@ dojo.declare("ideapad.IdeaElement",
         onUpdateSuccess: function(response, ioArgs){
             this.contract();
             this.updateUI(response);
+            this.onSave(this);
         },
 
         onUpdateError: function(){
@@ -79,6 +81,9 @@ dojo.declare("ideapad.IdeaElement",
         },
 
         onUpdateUI: function(self){
+        },
+
+        onSave: function(self){
         },
 
         deleteItem: function(){
