@@ -2,7 +2,6 @@ class SortablesController < ApplicationController
   before_filter :extract_model_class
 
   def create
-    results = @model_class.find(:all, :conditions => ["id in (?)", @sortable_value])
     results = @sortable_value.enum_for(:each_with_index).collect do |id, index|
       model = @model_class.find_by_id(id)
       @sortable_value[index] = nil unless model
