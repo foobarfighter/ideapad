@@ -10,10 +10,6 @@ class SortablesController < ApplicationController
     results = results.delete_if { |model| model.nil? }
     @sortable_value = @sortable_value.delete_if { |id| id.nil? }
 
-    puts "--------------------->"
-    puts results.collect(&:id).join(",")
-    puts @sortable_value.join(",")
-
     record_hash = results.inject({}) do |memo, record|
       memo[record.id] = record
       memo
